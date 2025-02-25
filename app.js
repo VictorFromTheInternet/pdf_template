@@ -10,6 +10,8 @@ console.log(port)
 // Middleware
 
 // Routes
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 app.use('/', pdf_router)
 
 
