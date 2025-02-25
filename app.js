@@ -6,15 +6,16 @@ const logger = require('./app/middleware/logging')
 const app = express()
 const port = process.env.PORT || 3000
 
-console.log(port)
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 // Middleware
 app.use('/', logger)
 
-// Routes
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+// routes
 app.use('/', pdf_router)
+
+
 
 
 app.listen(port, ()=>{

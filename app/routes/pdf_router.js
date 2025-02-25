@@ -6,8 +6,7 @@ router.get('/',(req,res)=>{
 })
 
 router.post('/demo',(req,res)=>{
-    // const test = req.body.test
-    console.log(req.body)
+    
     res.send(req.body)
 })
 
