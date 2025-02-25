@@ -1,16 +1,17 @@
 const express = require('express')
 const dotenv = require('dotenv').config()
-
+const pdf_router = require('./app/routes/pdf_router')
 
 const app = express()
 const port = process.env.PORT || 3000
 
 console.log(port)
 
-app.get('/', (req,res)=>{
+// Middleware
 
-    res.send({"message":"Hello World"})
-})
+// Routes
+app.use('/', pdf_router)
+
 
 app.listen(port, ()=>{
     console.log(`Server Started`)
