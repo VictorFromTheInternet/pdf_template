@@ -33,11 +33,15 @@ router.post('/demo', async (req,res)=>{
     try{
         const browser = await puppeteer.launch()     
         const page = await browser.newPage()
+
+        const template = req.body.template // filename (no .html)
+        const data = req.body.data // json data for the njk template
+        const htmlString = await getHtmlString(template,data)
         
-        await page.setContent('<h1> Hello World </h1>')
+        await page.setContent(htmlString)
         await page.emulateMediaType('screen')
         await page.pdf({
-            path: 'test.pdf',
+            path: 'app/output files/test.pdf',
             format: 'A4',
             printBackground: true
         })
@@ -56,10 +60,11 @@ router.post('/demo', async (req,res)=>{
 })
 
 router.post('/compile-test', async(req,res)=>{
-    const template = req.body.template
-    const data = req.body.data
+    const template = req.body.template // filename (no .html)
+    const data = req.body.data // json data for the njk template
+    const htmlString = await getHtmlString(template,data)
 
-    res.send({"html":getHtmlString(template, data)})
+    res.send({"html":htmlString})
 })
 
 module.exports = router

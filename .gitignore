@@ -1,6 +1,4 @@
 .env
 node_modules
-
-
 app/logging/logging.txt
-.pdf
+app/output files
