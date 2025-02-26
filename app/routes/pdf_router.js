@@ -1,9 +1,30 @@
 const express = require('express')
 const puppeteer = require('puppeteer')
+const nunjucks = require('nunjucks')
 const fs = require('fs-extra')
+const path = require('path')
 
 const router = express.Router()
+nunjucks.configure(path.join('..','templates'), {
+    autoescape: true,
+    express: express(),
+    watch: true
+});
 
+// helper functions
+async function getHtmlString(template, data){    
+    const filePath = path.join(__dirname, "..", "templates", `${template}.html`)
+    const njk_template = await fs.readFile(filePath, 'utf-8')    
+    const rendered_string = nunjucks.renderString(njk_template, {"data":data})
+
+    console.log(rendered_string)
+    // console.log(njk_template)
+    // console.log(nunjucks.renderString(njk_template,data))
+    return rendered_string 
+}
+
+
+// routes
 router.get('/',(req,res)=>{
     res.send({"message":"hello world"})
 })
@@ -32,6 +53,13 @@ router.post('/demo', async (req,res)=>{
         console.log(err)
     }
     
+})
+
+router.post('/compile-test', async(req,res)=>{
+    const template = req.body.template
+    const data = req.body.data
+
+    res.send({"html":getHtmlString(template, data)})
 })
 
 module.exports = router
