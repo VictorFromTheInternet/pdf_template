@@ -17,11 +17,12 @@ async function getHtmlString(template, data){
     const njk_template = await fs.readFile(filePath, 'utf-8')    
     const rendered_string = nunjucks.renderString(njk_template, {"data":data})
 
-    console.log(rendered_string)
+    // console.log(rendered_string)
     // console.log(njk_template)
     // console.log(nunjucks.renderString(njk_template,data))
     return rendered_string 
 }
+
 
 
 // routes
@@ -40,21 +41,25 @@ router.post('/demo', async (req,res)=>{
         
         await page.setContent(htmlString)
         await page.emulateMediaType('screen')
-        await page.pdf({
+        const pdfData = await page.pdf({
             path: 'app/output files/test.pdf',
             format: 'A4',
             printBackground: true
         })
 
+        const bufferArr = await Buffer.from(pdfData, "utf-8")
+        const base64String = await bufferArr.toString("base64")
+        const dataUrl = `data:application/pdf;base64,${base64String}`
+        
+        
         console.log('Generated PDF ')
         await browser.close()
 
-        res.send({"message":"Generated PDF"})
-
-
+        res.send({"type":"application/pdf","data":base64String,"dataUrl":dataUrl})        
 
     }catch(err){
         console.log(err)
+        res.send(err)
     }
     
 })
