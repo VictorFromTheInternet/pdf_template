@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 // Middleware
-app.use('/', logger)
+// app.use('/', logger)
 
 // routes
 app.use('/', pdf_router)
