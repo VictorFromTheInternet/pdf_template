@@ -3,6 +3,8 @@ const puppeteer = require('puppeteer')
 const nunjucks = require('nunjucks')
 const fs = require('fs-extra')
 const path = require('path')
+const dotenv = require('dotenv').config()
+
 
 const router = express.Router()
 nunjucks.configure(path.join('..','templates'), {
